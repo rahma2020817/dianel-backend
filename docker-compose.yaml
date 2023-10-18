@@ -1,0 +1,25 @@
+version: '3.9'
+networks:
+  airflow:
+#    driver: bridge
+volumes:
+  postgres-db-volume:
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: dianel
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "dianel" ]
+      interval: 5s
+      retries: 5
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - airflow
