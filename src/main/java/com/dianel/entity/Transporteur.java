@@ -1,12 +1,8 @@
-package com.dianel.dianel.entity;
+package com.dianel.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
 
 @Entity
 @Getter
@@ -14,7 +10,7 @@ import javax.persistence.Column;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usine {
+public class Transporteur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

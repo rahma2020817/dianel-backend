@@ -1,8 +1,8 @@
-package com.dianel.dianel.entity;
+package com.dianel.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 

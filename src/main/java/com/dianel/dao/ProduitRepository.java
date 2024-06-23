@@ -1,6 +1,6 @@
-package com.dianel.dianel.dao;
+package com.dianel.dao;
 
-import com.dianel.dianel.entity.Produit;
+import com.dianel.entity.Produit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

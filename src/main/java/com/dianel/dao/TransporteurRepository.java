@@ -1,5 +1,5 @@
-package com.dianel.dianel.dao;
-import com.dianel.dianel.entity.Transporteur;
+package com.dianel.dao;
+import com.dianel.entity.Transporteur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

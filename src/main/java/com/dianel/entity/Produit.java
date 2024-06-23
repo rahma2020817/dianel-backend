@@ -1,8 +1,8 @@
-package com.dianel.dianel.entity;
+package com.dianel.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -31,5 +31,7 @@ public class Produit {
 
     @ManyToMany(mappedBy = "produits")
     private Set<Cargaison> cargaisons;
+
+
 
 }
