@@ -1,5 +1,6 @@
 package com.dianel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class Produit {
     private String typeEmballage;
     private String codeChariot;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "produits")
     private Set<Cargaison> cargaisons;
 

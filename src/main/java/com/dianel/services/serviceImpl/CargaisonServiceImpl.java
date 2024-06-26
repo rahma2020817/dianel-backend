@@ -1,10 +1,12 @@
 package com.dianel.services.serviceImpl;
 
 import com.dianel.dao.CargaisonRepository;
+import com.dianel.dao.ProduitRepository;
 import com.dianel.dao.TransporteurRepository;
 import com.dianel.dao.UsineRepository;
 import com.dianel.dto.CargaisonDto;
 import com.dianel.entity.Cargaison;
+import com.dianel.entity.Produit;
 import com.dianel.services.CargaisonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.dianel.utils.Messages.CARGAISON_NON_TROUVEE;
 import static com.dianel.utils.Messages.CARGAISON_SUPPRIMEE_AVEC_SUCCÈS;
@@ -24,12 +29,26 @@ public class CargaisonServiceImpl implements CargaisonService {
     private final CargaisonRepository cargaisonRepository;
     private final UsineRepository usineRepository;
     private final TransporteurRepository transporteurRepository;
+    private final ProduitRepository produitRepository;
 
     @Override
     public ResponseEntity<Cargaison> createCargaison(CargaisonDto cargaisonDto) {
         try {
             Cargaison cargaison = mapToEntity(cargaisonDto);
+
+            // Persisting Cargaison to ensure it gets an ID
             Cargaison newCargaison = cargaisonRepository.save(cargaison);
+
+            // Persisting the relationship between Cargaison and Produit
+            Set<Produit> produits = new HashSet<>();
+            for (Long produitId : cargaisonDto.getProduitIds()) {
+                produitRepository.findById(produitId).ifPresent(produits::add);
+            }
+
+            // Adding the products to the cargaison
+            newCargaison.setProduits(produits);
+            newCargaison = cargaisonRepository.save(newCargaison); // Save again to update the relationship
+
             return new ResponseEntity<>(newCargaison, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -80,6 +99,11 @@ public class CargaisonServiceImpl implements CargaisonService {
     }
 
     private Cargaison mapToEntity(CargaisonDto cargaisonDto) {
+        Set<Produit> produits = new HashSet<>();
+        for (Long produitId : cargaisonDto.getProduitIds()) {
+            produitRepository.findById(produitId).ifPresent(produits::add);
+        }
+
         return Cargaison.builder()
                 .numeroCargaison(cargaisonDto.getNumeroCargaison())
                 .lieuMaraillage(cargaisonDto.getLieuMaraillage())
@@ -89,6 +113,7 @@ public class CargaisonServiceImpl implements CargaisonService {
                 .numeroBonLivraison(cargaisonDto.getNumeroBonLivraison())
                 .transporteur(transporteurRepository.findById(cargaisonDto.getTransporteurId()).orElse(null))
                 .typeCargaison(cargaisonDto.getTypeCargaison())
+                .produits(produits)
                 .build();
     }
 

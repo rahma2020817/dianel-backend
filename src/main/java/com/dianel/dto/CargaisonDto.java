@@ -30,7 +30,4 @@ public class CargaisonDto {
     private String typeCargaison;
     private Set<Long> produitIds;
 
-
-
-
 }
